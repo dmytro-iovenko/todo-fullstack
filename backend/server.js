@@ -4,6 +4,9 @@ import express from 'express'
 // create our express app
 const app = express()
 
+// setup a cors middleware for our express app
+app.use(cors())
+
 // choosing a port 
 const PORT = 8080
 
