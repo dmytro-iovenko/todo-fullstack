@@ -1,5 +1,6 @@
 // bring in express for our server setup
 import express from 'express'
+import cors from 'cors'
 
 // create our express app
 const app = express()
