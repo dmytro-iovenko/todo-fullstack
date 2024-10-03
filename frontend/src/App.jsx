@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 
+export const BASE_URL = "http://localhost:8080"
+
 function App() {
   const [todos, setTodos] = useState([]);
   const [input, setInput] = useState("");
@@ -7,7 +9,7 @@ function App() {
   useEffect(() => {
     let isMounted = true;
     (async () => {
-      const response = isMounted && (await fetch("http://localhost:8080/todos"));
+      const response = isMounted && (await fetch(`${BASE_URL}/todos`));
       const data = isMounted && (await response.json());
       isMounted && console.log(data);
       isMounted && setTodos(data);
@@ -30,7 +32,7 @@ function App() {
       text: input,
     };
     // make the request
-    const response = await fetch("http://localhost:8080/todos", {
+    const response = await fetch(`${BASE_URL}/todos`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(todo),
@@ -51,7 +53,7 @@ function App() {
   // the id is the _id of the todo document we want to delete
   async function handleDelete(id) {
     // make the request with the document id in the path (at the end)
-    const response = await fetch(`http://localhost:8080/todos/${id}`, {
+    const response = await fetch(`${BASE_URL}/todos/${id}`, {
       method: "DELETE",
     });
 
