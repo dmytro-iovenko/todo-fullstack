@@ -2,12 +2,15 @@ import { useEffect } from "react";
 
 function App() {
   useEffect(() => {
-    async function test() {
-      const response = await fetch("http://localhost:8080/test");
-      const data = await response.json();
-      console.log(data);
-    }
-    test();
+    let isMounted = true;
+    (async () => {
+      const response = isMounted && await fetch("http://localhost:8080/test");
+      const data = isMounted && await response.json();
+      isMounted && console.log(data);
+    })();
+    return () => {
+      isMounted = false;
+    };
   }, []);
   return <></>;
 }
