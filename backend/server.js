@@ -15,6 +15,9 @@ const app = express();
 // setup a cors middleware for our express app
 app.use(cors());
 
+// data from the client stored in request.body and formated as json
+app.use(express.json());
+
 // choosing a port
 const PORT = 8080;
 
@@ -23,14 +26,29 @@ app.get("/test", (req, res) => {
   res.json("Hello (from Server)!");
 });
 
-// a route that gets all todos and sends it to client
+// a route that gets all todos and sends it to client (READ)
 app.get("/todos", async (req, res) => {
   try {
-    // use find methid on the model to retrieve all documents from the todos collection
+    // use find method on the model to retrieve all documents from the todos collection
     const todos = await Todo.find();
-    console.log("GET /todos")
+    console.log("GET /todos");
     // send those documents to the client
     res.status(200).json(todos);
+  } catch (error) {
+    console.log(error);
+    res.status(400).json(error);
+  }
+});
+
+// a route that creates and adds a todo document to the database (CREATE)
+app.post("/todos", async (req, res) => {
+  try {
+    console.log(req.body);
+    // use create method to create a new document in the database
+    const newTodo = await Todo.create(req.body);
+    // send new document to the client
+    res.status(201).json(newTodo);
+    console.log("POST /todos");
   } catch (error) {
     console.log(error);
     res.status(400).json(error);
