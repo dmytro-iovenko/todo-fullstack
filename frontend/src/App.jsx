@@ -15,7 +15,15 @@ function App() {
       isMounted = false;
     };
   }, []);
-  return <></>;
+
+  return (
+    <>
+      <h1>Todo:</h1>
+      {todos.map((todo) => (
+        <li key={todo._id}>{todo.text}</li>
+      ))}
+    </>
+  );
 }
 
 export default App;
