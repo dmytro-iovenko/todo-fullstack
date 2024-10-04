@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export const BASE_URL = import.meta.env.VITE_BASE_URL
+export const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 function App() {
   const [todos, setTodos] = useState([]);
@@ -67,12 +67,37 @@ function App() {
     setTodos(updatedTodos);
   }
 
+  // the id is the _id of the todo document we want to update
+  async function handleComplete(id) {
+    // find todo with specified id
+    const todo = todos.find((todo) => todo._id == id);
+    // make the request with the document id in the path
+    const response = await fetch(`${BASE_URL}/todos/${todo._id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        ...todo,
+        completed: !todo.completed,
+      }),
+    });
+
+    // format the updated todo
+    const updatedTodo = await response.json();
+
+    // make a copy of the state but also replace the document with the matching id
+    const updatedTodos = todos.map((todo) => (todo._id === updatedTodo._id ? updatedTodo : todo));
+
+    // update the state with a new array
+    setTodos(updatedTodos);
+  }
+
   return (
     <>
       <h1>Todo:</h1>
       <ul>
         {todos.map((todo) => (
           <li key={todo._id}>
+            <input type="checkbox" checked={todo.completed} onChange={() => handleComplete(todo._id)} />
             {todo.text}
             <button onClick={() => handleDelete(todo._id)}>X</button>
           </li>

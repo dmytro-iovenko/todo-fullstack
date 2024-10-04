@@ -69,6 +69,21 @@ app.delete("/todos/:id", async (req, res) => {
   }
 });
 
+// a route for updating a todo document from the database
+app.put("/todos/:id", async (req, res) => {
+  try {
+    console.log(req.body)
+    // use the id from the params to find and replace it with the updatet one (req.body)
+    const updatedTodo = await Todo.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    console.log(updatedTodo);
+    console.log("PUT /todos/:id");
+    res.status(200).json(updatedTodo);
+  } catch (error) {
+    console.log(error);
+    res.status(400).json(error);
+  }
+});
+
 // setup our server to listen on a specific port
 app.listen(PORT, () => {
   console.log("Listening on port: " + PORT);
